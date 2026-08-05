@@ -1067,8 +1067,16 @@ p {
   text-align: center;
 }
 
+.text-sm {
+  font-size: 0.95rem;
+}
+
 .mt-4 {
   margin-top: var(--space-4);
+}
+
+.mb-3 {
+  margin-bottom: var(--space-3);
 }
 
 .mt-5 {
@@ -1173,6 +1181,13 @@ p {
   font-size: 0.95rem;
   margin-top: var(--space-3);
   max-width: 48ch;
+}
+
+.slide-note--strong {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-inline: auto;
 }
 
 /* -- decorative blobs / rings -- */
@@ -1381,8 +1396,8 @@ p {
 }
 
 .flow-arrow {
-  align-self: center;
-  margin-top: 32px;
+  align-self: flex-start;
+  margin-top: 16px;
   color: var(--color-text-tertiary);
   flex-shrink: 0;
 }
@@ -1533,19 +1548,32 @@ p {
   z-index: 1;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
   background: #fff;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-4);
   margin-top: var(--space-4);
   box-shadow: var(--shadow-card);
+}
+
+.case-summary .icon-tile {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+}
+
+.case-summary .icon-tile svg {
+  width: 22px;
+  height: 22px;
 }
 
 .case-summary p {
   margin: 0;
   color: var(--color-text);
-  font-weight: 500;
+  font-weight: 700;
+  font-size: 1.2rem;
+  line-height: 1.4;
 }
 
 /* -- slide 5 / 6: split layout with screenshot -- */
@@ -1601,6 +1629,16 @@ p {
   overflow: hidden;
   box-shadow: var(--shadow-card);
   border: 1px solid var(--color-border);
+}
+
+.screenshot-frame--card {
+  aspect-ratio: 4 / 3;
+}
+
+.screenshot-frame--card img {
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
 }
 
 .screenshot-frame img {
@@ -1711,10 +1749,15 @@ p {
   border-radius: var(--radius-pill);
 }
 
+.video-card__thumb {
+  position: relative;
+  padding-bottom: var(--space-4);
+}
+
 .video-card__icon {
   position: absolute;
-  top: var(--space-4);
-  right: var(--space-4);
+  top: 0;
+  right: 0;
   width: 48px;
   height: 48px;
   border-radius: 14px;
@@ -1739,7 +1782,7 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: var(--space-5) auto var(--space-4);
+  margin: var(--space-5) auto 0;
   box-shadow: 0 16px 32px -14px rgba(47, 79, 224, 0.55);
 }
 
@@ -1755,8 +1798,8 @@ p {
 
 .video-card__duration {
   position: absolute;
-  bottom: 96px;
-  right: var(--space-4);
+  bottom: var(--space-4);
+  right: 0;
   background: rgba(20, 22, 26, 0.75);
   color: #fff;
   font-size: 0.75rem;
@@ -1958,7 +2001,8 @@ p {
   height: 64px;
   border-radius: 50%;
   overflow: hidden;
-  margin-inline: auto var(--space-2);
+  margin-inline: auto;
+  margin-bottom: var(--space-2);
 }
 
 .phone-mock__avatar img {
@@ -2231,6 +2275,34 @@ p {
   letter-spacing: 0.04em;
   color: var(--color-accent);
   margin-bottom: var(--space-2);
+}
+
+.card--lg {
+  padding: var(--space-5);
+}
+
+.card--lg p {
+  margin-bottom: var(--space-2);
+}
+
+.card--lg p:last-child {
+  margin-bottom: 0;
+}
+
+.card--lg .feature-list {
+  margin: var(--space-1) 0 var(--space-3);
+}
+
+.card--lg .feature-list em {
+  display: block;
+  font-style: normal;
+  color: var(--color-text-tertiary);
+  font-size: 0.88rem;
+  margin-top: 2px;
+}
+
+.feature-grid--stack {
+  grid-template-columns: 1fr;
 }
 
 .card-eyebrow svg {
