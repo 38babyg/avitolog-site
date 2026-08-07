@@ -62,6 +62,7 @@ button {
   --color-surface-alt: #eef1f8;
   --color-border: #e6e9f2;
   --color-accent: #2f4fe0;
+  --color-accent-light: #5271f5;
   --color-accent-dark: #2540c2;
   --color-accent-soft: #e9edfc;
   --color-decor: #dde5fb;
@@ -169,15 +170,38 @@ p {
 }
 
 .btn-primary {
-  background: var(--color-accent);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--color-accent-light) 0%, var(--color-accent) 55%, var(--color-accent-dark) 100%);
   color: #fff;
-  box-shadow: 0 16px 32px -14px rgba(47, 79, 224, 0.55);
+  box-shadow: 0 18px 36px -14px rgba(47, 79, 224, 0.55), 0 4px 10px -4px rgba(47, 79, 224, 0.35);
+}
+
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-18deg);
+  transition: left 0.55s ease;
+  pointer-events: none;
 }
 
 .btn-primary:hover {
-  background: var(--color-accent-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 20px 36px -14px rgba(47, 79, 224, 0.6);
+  transform: translateY(-3px) scale(1.015);
+  box-shadow: 0 26px 44px -14px rgba(47, 79, 224, 0.62), 0 8px 16px -6px rgba(47, 79, 224, 0.4);
+}
+
+.btn-primary:hover::before {
+  left: 130%;
+}
+
+.btn-primary:active {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow: 0 12px 24px -12px rgba(47, 79, 224, 0.5);
 }
 
 .btn-secondary {
@@ -189,6 +213,11 @@ p {
 .btn-secondary:hover {
   background: var(--color-accent-soft);
   transform: translateY(-2px);
+  box-shadow: 0 14px 28px -16px rgba(47, 79, 224, 0.35);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
 }
 
 .btn-sm {
@@ -811,6 +840,7 @@ p {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 
 .icon-circle svg {
@@ -823,6 +853,15 @@ p {
    ========================================================================== */
 .page-hero-media {
   position: relative;
+}
+
+.page-hero-media::before {
+  content: "";
+  position: absolute;
+  inset: -18% -14%;
+  background: radial-gradient(circle at 65% 35%, rgba(47, 79, 224, 0.16), transparent 68%);
+  z-index: -1;
+  pointer-events: none;
 }
 
 .page-hero-media::after {
@@ -905,6 +944,19 @@ p {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--color-accent-soft);
+  box-shadow: 0 34px 60px -28px rgba(20, 26, 60, 0.24), 0 4px 12px rgba(20, 26, 60, 0.06);
+}
+
+.feature-card:hover .icon-circle {
+  background: var(--color-accent);
+  color: #fff;
+  transform: scale(1.08) rotate(-4deg);
 }
 
 .feature-card h3 {
@@ -918,6 +970,20 @@ p {
 .feature-card--accent {
   background: var(--color-accent-soft);
   border-color: transparent;
+  animation: card-pulse 3s ease-in-out infinite;
+}
+
+.feature-card--accent:hover {
+  animation-play-state: paused;
+}
+
+@keyframes card-pulse {
+  0%, 100% {
+    box-shadow: var(--shadow-card), 0 0 0 0 rgba(47, 79, 224, 0.22);
+  }
+  50% {
+    box-shadow: var(--shadow-card), 0 0 0 10px rgba(47, 79, 224, 0);
+  }
 }
 
 .feature-list {
@@ -955,7 +1021,7 @@ p {
 .cta-panel {
   position: relative;
   overflow: hidden;
-  background: var(--color-accent);
+  background: linear-gradient(135deg, var(--color-accent-light) 0%, var(--color-accent) 45%, var(--color-accent-dark) 100%);
   border-radius: 32px;
   padding: var(--space-6) var(--space-5);
   display: grid;
@@ -963,6 +1029,23 @@ p {
   gap: var(--space-5);
   align-items: center;
   color: #fff;
+  box-shadow: 0 40px 70px -30px rgba(37, 64, 194, 0.45);
+}
+
+.cta-panel::before {
+  content: "";
+  position: absolute;
+  inset: -30% -10% auto auto;
+  width: 55%;
+  height: 140%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.16) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-panel-text,
+.cta-panel-action {
+  position: relative;
+  z-index: 1;
 }
 
 .cta-panel h2 {
@@ -1069,6 +1152,10 @@ p {
 
 .text-sm {
   font-size: 0.95rem;
+}
+
+.mt-3 {
+  margin-top: var(--space-3);
 }
 
 .mt-4 {
@@ -2753,5 +2840,89 @@ p {
 
   .gallery-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   VIDEO EMBED (YouTube video blocks inside slide sections)
+   ========================================================================== */
+.video-embed {
+  position: relative;
+  z-index: 1;
+  margin-top: var(--space-5);
+}
+
+.video-embed__desc {
+  max-width: 68ch;
+  font-size: 1.02rem;
+  margin-bottom: var(--space-4);
+}
+
+.video-embed__frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 28px;
+  overflow: hidden;
+  background: var(--color-text);
+  box-shadow: 0 32px 64px -28px rgba(20, 26, 60, 0.32), 0 2px 8px rgba(20, 26, 60, 0.05);
+}
+
+.video-embed__frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.video-embed__takeaways {
+  margin-top: var(--space-5);
+}
+
+.video-embed__takeaways-label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  margin-bottom: var(--space-3);
+}
+
+@media (max-width: 640px) {
+  .video-embed__frame {
+    border-radius: var(--radius-lg);
+  }
+}
+
+/* ==========================================================================
+   SCROLL REVEAL (progressive enhancement — classes are only ever added by
+   script.js when IntersectionObserver is available, so content is fully
+   visible by default with no JS)
+   ========================================================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .feature-card--accent {
+    animation: none;
+  }
+
+  .btn-primary::before {
+    display: none;
   }
 }

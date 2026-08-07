@@ -35,7 +35,35 @@ document.addEventListener("DOMContentLoaded", () => {
   if (footerYear) footerYear.textContent = new Date().getFullYear().toString();
 
   initLightbox();
+  initScrollReveal();
 });
+
+function initScrollReveal() {
+  if (!("IntersectionObserver" in window)) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const items = Array.from(document.querySelectorAll(".feature-card, .cta-panel, .video-embed"));
+  if (!items.length) return;
+
+  items.forEach((el, i) => {
+    el.classList.add("reveal");
+    el.style.transitionDelay = `${(i % 4) * 0.08}s`;
+  });
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+
+  items.forEach((el) => io.observe(el));
+}
 
 function initLightbox() {
   const items = Array.from(document.querySelectorAll(".gallery-item"));
