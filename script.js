@@ -36,7 +36,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initLightbox();
   initScrollReveal();
+  initVideoEmbeds();
 });
+
+function initVideoEmbeds() {
+  document.querySelectorAll(".video-embed__frame[data-yt-id]").forEach((frame) => {
+    frame.addEventListener(
+      "click",
+      () => {
+        const id = frame.dataset.ytId;
+        const title = frame.dataset.ytTitle || "YouTube video";
+        const iframe = document.createElement("iframe");
+        iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+        iframe.title = title;
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.allowFullscreen = true;
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+        frame.appendChild(iframe);
+        frame.classList.add("is-playing");
+      },
+      { once: true }
+    );
+  });
+}
 
 function initScrollReveal() {
   if (!("IntersectionObserver" in window)) return;

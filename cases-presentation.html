@@ -3,40 +3,161 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Обо мне и кейсы — Андрей, Авитолог</title>
-  <meta name="description" content="Реальные кейсы продвижения магазинов iPhone на Авито: Future Store и iPremier." />
+  <title>Кейсы — Презентация | Андрей, Авитолог</title>
+  <meta name="description" content="Презентация кейсов продвижения магазинов iPhone на Авито: Future Store, iPremier, iSpark и Техномания." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* -- closing slide: contact card -- */
+    .cta-person {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .cta-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center 15%;
+      border: 2px solid rgba(255, 255, 255, 0.55);
+      flex-shrink: 0;
+    }
+
+    .cta-person-name {
+      display: block;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #fff;
+    }
+
+    .cta-person-role {
+      display: block;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.72);
+      margin-top: 2px;
+    }
+
+    .cta-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.18);
+      margin: 16px 0;
+    }
+
+    .cta-note {
+      margin-top: var(--space-3);
+      max-width: 50ch;
+    }
+
+    @media print {
+      @page { size: landscape; margin: 16mm 18mm; }
+
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+      main > section { page-break-after: always; break-after: page; }
+      main > section:last-child { page-break-after: auto; break-after: auto; }
+
+      /* decorative shapes span multiple printed pages and get clipped mid-page — cleaner without them */
+      .blob, .deco-rings, .deco-circle, .deco-dots { display: none !important; }
+
+      .slide, .case-block, .section { padding-block: 28px; }
+
+      /* real bug, not a fitting hack: this breakpoint stacked the two info cards
+         into a single narrow column at print width, so each card got stranded
+         alone on its own near-empty page — keep the normal two-up layout */
+      .case-columns:not(.case-columns--single) { grid-template-columns: repeat(2, 1fr) !important; }
+
+      /* the stat tiles kept wrapping 3 into an awkward 2+1 layout — a modest trim
+         (not a shrink to nothing) lets them sit comfortably in one row */
+      .result-stats { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important; gap: 16px !important; }
+      .result-stat { padding: 18px 16px !important; }
+      .result-stat__value { font-size: 1.6rem !important; }
+      .result-stat__label { font-size: 0.82rem !important; }
+
+      /* a 4-shot gallery wrapped 3+1 at the default tile size, which needed a
+         whole extra (near-empty) page — a modest trim keeps 3 or 4 shots on one
+         row so the gallery stays with the rest of its case */
+      .gallery-grid { grid-template-columns: repeat(auto-fit, minmax(178px, 1fr)) !important; }
+
+      /* don't strand the "Результат" heading + note alone at the bottom of a
+         page with its stats pushed to the next one — keep them together */
+      .slide-note { break-after: avoid; }
+
+      /* box-shadow isn't part of an element's layout box, so when the last row
+         of a gallery lands right at a page boundary its shadow still bleeds a
+         sliver onto a stray extra page — drop shadows in print, borders alone
+         read fine on paper anyway */
+      .card, .case-info-card, .gallery-item, .video-card, .cta-contact-card,
+      .case-logo, .toc-pill { box-shadow: none !important; }
+
+      #case-ispark .case-header { margin-bottom: 36px !important; }
+      #case-ispark .callout { padding: 16px 22px !important; margin-bottom: 4px !important; }
+      #case-ispark .result-heading { margin-top: 20px !important; margin-bottom: 12px !important; }
+      #case-ispark .result-stat { padding: 12px 12px !important; }
+      #case-ispark .feature-list li { margin-bottom: 4px !important; }
+
+      /* same hairline-fit issue on case iPremier (02) — a touch of scoped trim */
+      #case-ipremier .callout { padding: 20px 27px !important; }
+      #case-ipremier .result-stat { padding: 15px 14px !important; }
+      #case-ipremier .feature-list li { margin-bottom: 5px !important; }
+
+      /* case Техномания (04): trim its opening block (~15-20%) so the intro
+         card and first results group join the header on one page */
+      #case-technomania .callout { padding: 20px 27px !important; }
+      #case-technomania .case-columns--single { margin-bottom: 32px !important; }
+      #case-technomania .case-header { margin-bottom: 32px !important; }
+      #case-technomania .result-group:first-of-type .result-stat { padding: 15px 14px !important; }
+      #case-technomania .result-group:first-of-type .result-heading { margin-bottom: 16px !important; }
+
+      /* ...but the second ("Сейчас") group of 4 tiles should read as the case's
+         headline numbers — noticeably bigger, still four across */
+      #case-technomania .result-group + .result-group .result-stat { padding: 24px 22px !important; }
+      #case-technomania .result-group + .result-group .result-stat__value { font-size: 2.1rem !important; }
+      #case-technomania .result-group + .result-group .result-stat__label { font-size: 1rem !important; }
+
+      /* scroll-reveal animation never fires during headless print — force content visible */
+      .reveal { opacity: 1 !important; transform: none !important; }
+
+      /* keep visual chunks intact instead of slicing them across a page break */
+      .card, .case-info-card, .result-stat, .gallery-item, .callout,
+      .case-summary, .video-card, .eyebrow-badge, .case-title-row,
+      .cta-contact-card, .gallery-grid, .result-stats, .cta-panel { break-inside: avoid; }
+
+      /* Chrome fragments CSS grid/flex unpredictably when printing, even with
+         break-inside: avoid set, so this panel kept splitting after the heading
+         no matter the outer padding — this is the one place a real (moderate,
+         still readable) size trim is needed so it lands on a single page,
+         together with the footer right underneath it */
+      .cta-panel { display: block; padding: 24px 32px !important; }
+      .cta-panel-text h2 { font-size: 1.5rem !important; margin-bottom: 8px !important; }
+      /* (kept the ::before gradient — it wasn't the cause of the fragmentation) */
+      .cta-panel-text .cta-lead { font-size: 0.95rem !important; }
+      .cta-note { font-size: 0.86rem !important; margin-top: 10px !important; }
+      .cta-panel-action { margin-top: 16px; }
+      .cta-contact-card { max-width: 440px; padding: 18px !important; }
+      .cta-avatar { width: 46px !important; height: 46px !important; }
+      .cta-person { margin-bottom: 10px !important; }
+      .cta-divider { margin: 10px 0 !important; }
+      .cta-contact-card .icon-circle { width: 38px !important; height: 38px !important; }
+
+      /* the footer's own screen spacing (big top margin, tall inner padding)
+         only makes sense after a long scrolling page — on this one it's what
+         was pushing it onto a stray page of its own */
+      .site-footer { margin-top: 8px !important; break-inside: avoid; }
+      .footer-inner { grid-template-columns: 1.2fr 1fr 1fr !important; padding-block: 6px !important; }
+      .footer-bottom { padding-block: 4px !important; }
+      .footer-brand { gap: 10px !important; }
+      .avatar-img--lg { width: 44px !important; height: 44px !important; }
+
+      h1, h2, h3, .result-heading, .case-header { break-after: avoid; }
+    }
+  </style>
 </head>
-<body data-page="cases">
-
-  <header class="site-header" id="site-header">
-    <div class="container header-inner">
-      <a href="index.html" class="brand">
-        <img src="assets/andrey.jpg" alt="Андрей" class="avatar-img" />
-        <span class="brand-text">
-          <span class="brand-name">Андрей</span>
-          <span class="brand-role">Авитолог</span>
-        </span>
-      </a>
-
-      <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
-        <ul>
-          <li><a href="index.html" class="nav-link">Главная</a></li>
-          <li><a href="bid-manager.html" class="nav-link">Бид-менеджер</a></li>
-          <li><a href="iphone.html" class="nav-link">Продвижение iPhone</a></li>
-          <li><a href="cases.html" class="nav-link is-active">Обо мне и кейсы</a></li>
-          <li><a href="https://t.me/maestro_avitolog" target="_blank" rel="noopener" class="btn btn-primary btn-sm nav-telegram">Telegram</a></li>
-        </ul>
-      </nav>
-
-      <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </header>
+<body data-page="cases-presentation">
 
   <main>
 
@@ -46,13 +167,6 @@
       <div class="container">
         <h1 class="hero-title">Кейсы</h1>
         <p class="slide-lede">Реальные результаты клиентов из ниши iPhone: вводные данные, что было сделано и к чему это привело — по каждому магазину отдельно.</p>
-
-        <div class="toc-list">
-          <a href="#case-futurestore" class="toc-pill"><span class="toc-pill__num">1</span>Future Store</a>
-          <a href="#case-ipremier" class="toc-pill"><span class="toc-pill__num">2</span>iPremier</a>
-          <a href="#case-ispark" class="toc-pill"><span class="toc-pill__num">3</span>iSpark</a>
-          <a href="#case-technomania" class="toc-pill"><span class="toc-pill__num">4</span>Техномания</a>
-        </div>
       </div>
     </section>
 
@@ -405,10 +519,12 @@
         <div class="gallery-grid mt-5">
           <a href="assets/images/case-technomania-profile-before.jpg" class="gallery-item" data-group="technomania" data-full="assets/images/case-technomania-profile-before.jpg" data-caption="Профиль Техномания — до начала работы">
             <img src="assets/images/case-technomania-profile-before.jpg" alt="Профиль Техномания до начала работы" />
+            <span class="gallery-item__caption">Профиль: до</span>
             <span class="gallery-item__zoom"><i data-lucide="expand"></i></span>
           </a>
           <a href="assets/images/case-technomania-profile-after.jpg" class="gallery-item" data-group="technomania" data-full="assets/images/case-technomania-profile-after.jpg" data-caption="Профиль Техномания — сейчас">
             <img src="assets/images/case-technomania-profile-after.jpg" alt="Профиль Техномания сейчас" />
+            <span class="gallery-item__caption">Профиль: сейчас</span>
             <span class="gallery-item__zoom"><i data-lucide="expand"></i></span>
           </a>
           <a href="assets/images/case-technomania-before.jpg" class="gallery-item" data-group="technomania" data-full="assets/images/case-technomania-before.jpg" data-caption="Статистика: июль, первый месяц до">
@@ -425,7 +541,7 @@
       </div>
     </section>
 
-    <!-- ФИНАЛЬНЫЙ CTA -->
+    <!-- ЗАКРЫВАЮЩИЙ СЛАЙД -->
     <section class="section">
       <div class="container">
         <div class="cta-panel">
@@ -434,16 +550,26 @@
               <span class="num">06</span>
               <span class="label">На связи</span>
             </span>
-            <h2>Если вы хотите, чтобы следующий кейс стал вашим, — напишите мне в Telegram</h2>
+            <h2>Если вы хотите, чтобы следующий кейс стал вашим</h2>
             <p class="cta-lead">Давайте начнём первые шаги в сторону улучшения вашего магазина!</p>
+            <p class="cta-note">Бесплатно разберём вашу ситуацию, посмотрим кабинет Авито и составим понятный план дальнейших действий — без каких-либо обязательств.</p>
           </div>
 
           <div class="cta-panel-action">
             <div class="cta-contact-card">
+              <div class="cta-person">
+                <img src="assets/andrey.jpg" alt="Андрей" class="cta-avatar" />
+                <span>
+                  <span class="cta-person-name">Андрей</span>
+                  <span class="cta-person-role">Авитолог · продвижение iPhone на Авито</span>
+                </span>
+              </div>
+
+              <div class="cta-divider"></div>
+
               <div class="icon-circle"><i data-lucide="send"></i></div>
-              <p class="cta-contact-label">Telegram</p>
-              <a href="https://t.me/maestro_avitolog" target="_blank" rel="noopener" class="cta-handle">@maestro_avitolog</a>
-              <a href="https://t.me/maestro_avitolog" target="_blank" rel="noopener" class="btn btn-primary">Написать в Telegram</a>
+              <p class="cta-contact-label">Бесплатный разбор в Telegram</p>
+              <span class="cta-handle">@maestro_avitolog</span>
             </div>
           </div>
         </div>
@@ -464,17 +590,16 @@
 
       <div class="footer-contacts">
         <p class="footer-label">Связаться</p>
-        <a href="https://t.me/maestro_avitolog" target="_blank" rel="noopener" class="footer-link">Telegram</a>
+        <span class="footer-link">Telegram: @maestro_avitolog</span>
       </div>
 
       <div class="footer-cta">
-        <a href="https://t.me/maestro_avitolog" target="_blank" rel="noopener" class="btn btn-primary">Написать в Telegram</a>
         <p class="footer-hint">Бесплатная консультация по вашей ситуации</p>
       </div>
     </div>
 
     <div class="container footer-bottom">
-      <p>&copy; <span id="footer-year"></span> Андрей — Авитолог</p>
+      <p>© 2026 Андрей — Авитолог</p>
     </div>
   </footer>
 
