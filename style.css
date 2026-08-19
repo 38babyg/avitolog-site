@@ -2164,6 +2164,10 @@ p {
     order: -1;
   }
 
+  .split-layout--video .split-layout__media {
+    order: 0;
+  }
+
   .slide-header-row {
     flex-direction: column;
   }
